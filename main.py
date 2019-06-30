@@ -15,14 +15,14 @@ def scan_chrome_folder(chrome_config_folder):
     with open(os.path.join(chrome_config_folder, 'Local State')) as f:
         local_state = json.load(f)
         cache = local_state['profile']['info_cache']
-        for folder, profile_data in cache.iteritems():
+        for folder, profile_data in cache.items():
             profiles[folder] = {
                 'name': profile_data['name'],
                 'email': profile_data['user_name']
             }
 
     # Leave out every past profile which doesn't exist anymore
-    for folder in profiles.keys():
+    for folder in list(profiles.keys()):
         try:
             os.listdir(os.path.join(chrome_config_folder, folder))
         except:
@@ -47,7 +47,7 @@ class KeywordQueryEventListener(EventListener):
         query = event.get_argument()
         if query:
             query = query.strip().lower()
-            for folder in profiles.keys():
+            for folder in list(profiles.keys()):
                 name = profiles[folder]['name'].lower()
                 if query not in name:
                     profiles.pop(folder)
